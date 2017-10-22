@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Nmap uses raw IP packets to determine what hosts are available on the network, what services (application name and version) those hosts are offering and running, what operating systems (and OS versions) they are running, what type of packet filters/firewalls are in use</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>target</name>
+          <description>type the host ip address or the URL EX; 192.168.2.1 127.0.0.1 scanme.nmap.org</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>scan_tech</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>-sS</string>
+              <string>-sT</string>
+              <string>-sA</string>
+              <string>-sW</string>
+              <string>-sM</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>scan_port</name>
+          <description>[-] --&gt; Port scan all ports
+[1-65535] --&gt; from port 1 to 65535
+[80,443,8080] --&gt; specific ports
+[U:53] --&gt; UDP specific port
+[T:80] --&gt; TCP specific port
+[0-] --&gt; makes the scan go through to port 65535</description>
+          <defaultValue>-</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>os_detection</name>
+          <description>[-O] --&gt; Remote OS detection using TCP/IP stack fingerprinting
+[-O --osscan-limit] --&gt; If at least one open and one closed TCP port are not found it will not try OS detection against host
+[-O --osscan-guess] --&gt; Makes Nmap guess more aggressively
+[-O --max-os-tries] --&gt; Set the maximum number x of OS detection tries against a target
+[-A] --&gt; Enables OS detection, version detection, script scanning, and traceroute</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>-O</string>
+              <string>-O --osscan-limit</string>
+              <string>-O --osscan-guess</string>
+              <string>-O --max-os-tries</string>
+              <string>-A</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>flag_discov</name>
+          <description>[-Pn] --&gt; Treat all hosts as online -- skip host discovery
+[-sL] --&gt; List Scan - simply list targets to scan
+[-sn] --&gt; Ping Scan - disable port scan
+[-Ps] --&gt; TCP SYN
+[-PA] --&gt; ACK
+[-PU] --&gt; UDP
+[-PR] --&gt; SCTP
+[-PY] --&gt; SCTP discovery to given ports
+[-n] --&gt; Never do DNS resolution
+[--traceroute] --&gt; Trace hop path to each host</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>-Pn</string>
+              <string>-sL</string>
+              <string>-sn</string>
+              <string>-Ps</string>
+              <string>-PA</string>
+              <string>-PU</string>
+              <string>-PR</string>
+              <string>-n</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>service_detec</name>
+          <description>[-sV] --&gt; Attempts to determine the version of the service running on port
+[-sV --version-all] --&gt; Enable intensity level 9. Higher possibility of correctness
+[-sV --version-trace] --&gt; Show detailed version scan activity (for debugging)
+</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>-sV</string>
+              <string>-sV --version-all</string>
+              <string>-sV --version-trace</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>nse_script</name>
+          <description>default --&gt; Scan with default NSE scripts. Considered useful for threat discovery and safety ENV
+http-sql-injection --&gt; Check for SQL injections</description>
+          <defaultValue>default,http-sql-injection</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>debugging_level</name>
+          <description>This is the debugging level for feedback such as verbose but with more details</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string></string>
+              <string>-d</string>
+              <string>-dd</string>
+              <string>-ddd</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>./nmap_script.sh --target=$target --scan-tech=$scan_tech --scan-port=$scan_port --os-detection=$os_detection --flag-discov=$flag_discov --service-detec=$service_detec --nse-script=$nse_script --debugging-level=$debugging_level
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
